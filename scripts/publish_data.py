@@ -25,7 +25,7 @@ def publish():
 
     shutil.copy2(SOURCE_FILE, TARGET_FILE)
 
-    print("Published index_values.csv to public/data/")
+    print("Published index_values.csv to docs/data/")
 
 if __name__ == "__main__":
     publish()
