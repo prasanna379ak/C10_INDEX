@@ -35,7 +35,7 @@ jobs:
         run: |
           git config user.name "c-index-bot"
           git config user.email "bot@cindex.local"
-          git add data/index_values.csv public/data/index_values.csv
+          git add data/index_values.csv docs/data/index_values.csv
           git commit -m "Update index values" || echo "No changes to commit"
 
       - name: Push changes
