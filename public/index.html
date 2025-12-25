@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>C_INDEX-10</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+
+  <style>
+    :root {
+      --bg: #0b0e11;
+      --panel: #12161c;
+      --border: #1f2630;
+      --text: #eaecef;
+      --muted: #9aa4b2;
+      --accent: #4cc9f0;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, Arial, sans-serif;
+    }
+
+    header {
+      padding: 24px 32px;
+      border-bottom: 1px solid var(--border);
+      background: var(--panel);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    header span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    main {
+      padding: 32px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    #chart {
+      height: 520px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 32px;
+    }
+
+    .grid h3 {
+      margin-top: 0;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .grid p {
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    footer {
+      margin-top: 64px;
+      padding: 24px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+
+    .error {
+      color: #ff6b6b;
+      font-size: 14px;
+      padding: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>C_INDEX-10</h1>
+  <span>Rule-based crypto market index · Informational only</span>
+</header>
+
+<main>
+
+  <div class="card">
+    <div id="chart"></div>
+    <div id="error" class="error" style="display:none;"></div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Index Overview</h3>
+      <p>
+        C_INDEX-10 measures the performance of the largest cryptocurrencies
+        by market capitalization using a fixed, transparent methodology.
+        It is designed to reflect market behavior, not predict it.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>Methodology (v1)</h3>
+      <p>
+        • 10 assets total<br>
+        • Bitcoin fixed at 30% weight<br>
+        • Market-cap ranking for selection<br>
+        • Stablecoins & derivatives excluded<br>
+        • Quarterly rebalancing<br>
+        • Market-cap normalized index
+      </p>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  No financial advice. Index values are indicative and may be volatile.
+</footer>
+
+<script>
+async function loadIndex() {
+  try {
+    const response = await fetch("data/index_values.csv");
+    if (!response.ok) throw new Error("CSV not found");
+
+    const text = await response.text();
+    const rows = text.trim().split("\n");
+
+    if (rows.length < 2) throw new Error("CSV has no data");
+
+    let start = rows[0].toLowerCase().includes("timestamp") ? 1 : 0;
+
+    const x = [];
+    const y = [];
+
+    for (let i = start; i < rows.length; i++) {
+      const [ts, val] = rows[i].split(",");
+      const d = new Date(ts);
+      const v = parseFloat(val);
+      if (!isNaN(d) && !isNaN(v)) {
+        x.push(d);
+        y.push(v);
+      }
+    }
+
+    if (x.length === 0) throw new Error("No valid rows in CSV");
+
+    Plotly.newPlot("chart", [{
+      x,
+      y,
+      type: "scatter",
+      mode: "lines",
+      line: { color: "#4cc9f0", width: 2 }
+    }], {
+      paper_bgcolor: "#12161c",
+      plot_bgcolor: "#12161c",
+      font: { color: "#eaecef" },
+      margin: { t: 20, l: 60, r: 20, b: 40 },
+      xaxis: { title: "Time" },
+      yaxis: { title: "Index Value" }
+    }, { responsive: true });
+
+  } catch (err) {
+    document.getElementById("error").style.display = "block";
+    document.getElementById("error").innerText =
+      "Chart error: " + err.message;
+  }
+}
+
+loadIndex();
+</script>
+
+</body>
+</html>

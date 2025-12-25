@@ -1,0 +1,39 @@
+index:
+  name: C_INDEX_10
+  base_value: 1000
+  rebalance_days: 90
+
+weights:
+  btc: 0.30
+  second: 0.22
+  others: 0.06
+
+assets:
+  total: 10
+  forced_btc_id: bitcoin
+
+exclusions:
+  ids:
+    # Stablecoins
+    - tether
+    - usd-coin
+    - binance-usd
+    - dai
+    - true-usd
+    - paxos-standard
+
+    # Wrapped assets
+    - wrapped-bitcoin
+    - wrapped-ethereum
+
+    # Liquid staking / derivatives
+    - lido-staked-ether
+    - staked-ether
+    - rocket-pool-eth
+    - coinbase-wrapped-staked-eth
+    - frax-ether
+
+data_source:
+  coingecko_url: https://api.coingecko.com/api/v3/coins/markets
+  vs_currency: usd
+  fetch_limit: 50
