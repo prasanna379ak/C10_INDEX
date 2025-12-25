@@ -8,7 +8,7 @@ import shutil
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 DATA_DIR = BASE_DIR / "data"
-PUBLIC_DATA_DIR = BASE_DIR / "public" / "data"
+PUBLIC_DATA_DIR = BASE_DIR / "docs" / "data"
 
 SOURCE_FILE = DATA_DIR / "index_values.csv"
 TARGET_FILE = PUBLIC_DATA_DIR / "index_values.csv"
