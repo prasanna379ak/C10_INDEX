@@ -32,6 +32,9 @@ exclusions:
     - rocket-pool-eth
     - coinbase-wrapped-staked-eth
     - frax-ether
+    - staked-ether
+    - staked
+    - figure-heloc
 
 data_source:
   coingecko_url: https://api.coingecko.com/api/v3/coins/markets
